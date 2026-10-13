@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Blog</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1>My Blog</h1>
+    <p>Ideas, stories, and things I've learned.</p>
+
+    <% if (currentUser) { %>
+      <p>Welcome, <%= currentUser.name %>!</p>
+      <form action="/signout" method="POST">
+        <button type="submit">Sign Out</button>
+      </form>
+    <% } else { %>
+      <p>
+        <a href="/signin">Sign In</a> |
+        <a href="/signup">Sign Up</a>
+      </p>
+    <% } %>
+  </header>
+
+  <main>
+    <% if (currentUser) { %>
+      <section class="create-post">
+        <h2>Create a Blog Post</h2>
+
+        <form action="/blogs" method="POST">
+          <label for="title">Post Title</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            maxlength="255"
+            required
+          >
+
+          <label for="body">Post Content</label>
+          <textarea
+            id="body"
+            name="body"
+            rows="5"
+            required
+          ></textarea>
+
+          <button type="submit">Publish Post</button>
+        </form>
+      </section>
+    <% } else { %>
+      <p><a href="/signin">Sign in</a> to create a blog post.</p>
+    <% } %>
+
+    <h2>Latest Blog Posts</h2>
+
+    <% if (blogs.length === 0) { %>
+      <p>No blog posts yet.</p>
+    <% } %>
+
+    <% blogs.forEach(blog => { %>
+      <article class="blog-post">
+        <h3><%= blog.title %></h3>
+        <p><%= blog.body %></p>
+
+        <p class="post-meta">
+          By <%= blog.creator_name %>
+          · <%= new Date(blog.date_created).toLocaleString() %>
+        </p>
+
+        <% if (currentUser &&
+      String(currentUser.user_id) === String(blog.creator_user_id)) { %>
+          <div class="post-actions">
+            <a href="/blogs/<%= blog.blog_id %>/edit">Edit</a>
+
+            <form
+              action="/blogs/<%= blog.blog_id %>/delete"
+              method="POST"
+              onsubmit="return confirm('Are you sure you want to delete this post?');"
+            >
+              <button type="submit">Delete</button>
+            </form>
+          </div>
+        <% } %>
+      </article>
+    <% }) %>
+  </main>
+</body>
+</html>

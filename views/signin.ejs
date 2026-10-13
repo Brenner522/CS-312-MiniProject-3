@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - My Blog</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1>My Blog</h1>
+    <p>Welcome back!</p>
+  </header>
+
+  <main>
+    <h2>Sign In</h2>
+
+    <% if (error) { %>
+      <p class="error" role="alert"><%= error %></p>
+    <% } %>
+
+    <form action="/signin" method="POST">
+      <label for="user_id">User ID</label>
+      <input id="user_id" name="user_id" required maxlength="255"
+             autocomplete="username">
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password"
+             required autocomplete="current-password">
+
+      <button type="submit">Sign In</button>
+    </form>
+
+    <p>Don't have an account? <a href="/signup">Sign up</a></p>
+    <p><a href="/">Back to blog</a></p>
+  </main>
+</body>
+</html>
